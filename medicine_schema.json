@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Medicine",
+  "description": "Schema for a single medicine object in the pharmacy system",
+  "type": "object",
+  "required": ["medicine_name", "price", "stock", "prescription_required"],
+  "additionalProperties": false,
+  "properties": {
+    "medicine_id": {
+      "type": "integer",
+      "description": "Auto-incremented primary key",
+      "minimum": 1
+    },
+    "medicine_name": {
+      "type": "string",
+      "description": "Full name of the medicine",
+      "minLength": 2,
+      "maxLength": 150
+    },
+    "category_id": {
+      "type": ["integer", "null"],
+      "description": "Foreign key referencing categories table",
+      "minimum": 1
+    },
+    "category_name": {
+      "type": ["string", "null"],
+      "description": "Joined category name (optional, read-only)"
+    },
+    "supplier_id": {
+      "type": ["integer", "null"],
+      "description": "Foreign key referencing suppliers table",
+      "minimum": 1
+    },
+    "price": {
+      "type": "number",
+      "description": "Retail price in local currency",
+      "minimum": 0,
+      "multipleOf": 0.01
+    },
+    "stock": {
+      "type": "integer",
+      "description": "Current quantity available in inventory",
+      "minimum": 0
+    },
+    "prescription_required": {
+      "type": "string",
+      "description": "Whether a doctor's prescription is required",
+      "enum": ["YES", "NO"]
+    }
+  }
+}
