@@ -1,0 +1,108 @@
+{
+    "medicines": [
+        {
+            "id": 1,
+            "name": "Paracetamol 500mg",
+            "category": "Pain Relief",
+            "categoryId": 1,
+            "price": 5.99,
+            "stock": 150,
+            "prescription": "NO"
+        },
+        {
+            "id": 2,
+            "name": "Amoxicillin 250mg",
+            "category": "Antibiotics",
+            "categoryId": 2,
+            "price": 12.5,
+            "stock": 45,
+            "prescription": "YES"
+        },
+        {
+            "id": 3,
+            "name": "Ibuprofen 400mg",
+            "category": "Pain Relief",
+            "categoryId": 1,
+            "price": 7.99,
+            "stock": 200,
+            "prescription": "NO"
+        },
+        {
+            "id": 4,
+            "name": "Aspirin 75mg",
+            "category": "Cardiovascular",
+            "categoryId": 3,
+            "price": 4.5,
+            "stock": 15,
+            "prescription": "NO"
+        },
+        {
+            "id": 5,
+            "name": "Metformin 500mg",
+            "category": "Diabetes",
+            "categoryId": 4,
+            "price": 15.99,
+            "stock": 80,
+            "prescription": "YES"
+        },
+        {
+            "id": 6,
+            "name": "Lisinopril 10mg",
+            "category": "Cardiovascular",
+            "categoryId": 3,
+            "price": 18.75,
+            "stock": 35,
+            "prescription": "YES"
+        },
+        {
+            "id": 7,
+            "name": "Cetirizine 10mg",
+            "category": "Allergy",
+            "categoryId": 5,
+            "price": 6.25,
+            "stock": 120,
+            "prescription": "NO"
+        },
+        {
+            "id": 8,
+            "name": "Omeprazole 20mg",
+            "category": "Gastrointestinal",
+            "categoryId": 6,
+            "price": 11.5,
+            "stock": 18,
+            "prescription": "YES"
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Pain Relief",
+            "description": "Medications for pain management"
+        },
+        {
+            "id": 2,
+            "name": "Antibiotics",
+            "description": "Bacterial infection treatments"
+        },
+        {
+            "id": 3,
+            "name": "Cardiovascular",
+            "description": "Heart and blood pressure medications"
+        },
+        {
+            "id": 4,
+            "name": "Diabetes",
+            "description": "Blood sugar management medications"
+        },
+        {
+            "id": 5,
+            "name": "Allergy",
+            "description": "Allergy and antihistamine medications"
+        },
+        {
+            "id": 6,
+            "name": "Gastrointestinal",
+            "description": "Digestive system medications"
+        }
+    ]
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Admin Dashboard</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Pharmacy Admin Dashboard</h1>
+            <div class="header-info">
+                <span id="currentDate"></span>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Medicines</h3>
+                <div class="value" id="totalMedicines">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Categories</h3>
+                <div class="value" id="totalCategories">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Low Stock Items</h3>
+                <div class="value" id="lowStock">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Value</h3>
+                <div class="value" id="totalValue">$0</div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('medicines')">💊 Medicines</button>
+            <button class="tab" onclick="switchTab('categories')">📁 Categories</button>
+        </div>
+
+        <!-- Medicines Tab -->
+        <div id="medicines-tab" class="tab-content active">
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" id="medicineSearch" placeholder="🔍 Search medicines..." onkeyup="searchMedicines()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="filter-group">
+                    <select id="medicineStockFilter" onchange="filterMedicines()">
+                        <option value="all">All Stock Levels</option>
+                        <option value="low">Low Stock (&lt;20)</option>
+                        <option value="medium">Medium Stock (20-50)</option>
+                        <option value="high">High Stock (&gt;50)</option>
+                    </select>
+                    <select id="medicineRxFilter" onchange="filterMedicines()">
+                        <option value="all">All Prescriptions</option>
+                        <option value="YES">Prescription Required</option>
+                        <option value="NO">No Prescription</option>
+                    </select>
+                    <button class="btn btn-success" onclick="openMedicineModal()">➕ Add Medicine</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="medicineTable">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable('medicines', 0)">ID</th>
+                            <th class="sortable" onclick="sortTable('medicines', 1)">Medicine Name</th>
+                            <th class="sortable" onclick="sortTable('medicines', 2)">Category</th>
+                            <th class="sortable" onclick="sortTable('medicines', 3)">Price</th>
+                            <th class="sortable" onclick="sortTable('medicines', 4)">Stock</th>
+                            <th>Prescription</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicineTableBody">
+                        <tr><td colspan="7" class="loading">Loading medicines...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Categories Tab -->
+        <div id="categories-tab" class="tab-content">
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" id="categorySearch" placeholder="🔍 Search categories..." onkeyup="searchCategories()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <button class="btn btn-success" onclick="openCategoryModal()">➕ Add Category</button>
+            </div>
+
+            <div class="table-container">
+                <table id="categoryTable">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortTable('categories', 0)">ID</th>
+                            <th class="sortable" onclick="sortTable('categories', 1)">Category Name</th>
+                            <th class="sortable" onclick="sortTable('categories', 2)">Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoryTableBody">
+                        <tr><td colspan="4" class="loading">Loading categories...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medicine Modal -->
+    <div id="medicineModal" class="modal">
+        <div class="modal-content">
+            <h2 id="medicineModalTitle">Add Medicine</h2>
+            <form id="medicineForm">
+                <input type="hidden" id="medicineId">
+                <div class="form-group">
+                    <label>Medicine Name *</label>
+                    <input type="text" id="medicineName" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="medicineCategory">
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price *</label>
+                    <input type="number" id="medicinePrice" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Stock *</label>
+                    <input type="number" id="medicineStock" required>
+                </div>
+                <div class="form-group">
+                    <label>Prescription Required</label>
+                    <select id="medicinePrescription">
+                        <option value="NO">No</option>
+                        <option value="YES">Yes</option>
+                    </select>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-success">💾 Save</button>
+                    <button type="button" class="btn" onclick="closeMedicineModal()">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Category Modal -->
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <h2 id="categoryModalTitle">Add Category</h2>
+            <form id="categoryForm">
+                <input type="hidden" id="categoryId">
+                <div class="form-group">
+                    <label>Category Name *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="categoryDescription" rows="4"></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-success">💾 Save</button>
+                    <button type="button" class="btn" onclick="closeCategoryModal()">❌ Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Link the external JavaScript file -->
+    <script src="js/admin.js"></script>
+</body>
+</html>
