@@ -1,0 +1,255 @@
+{
+  "info": {
+    "name": "PharmaHub Laravel API",
+    "description": "Complete Postman collection for the PharmaHub Laravel REST API.\n\nSetup:\n1. Run the app: php artisan serve\n2. POST /api/login with admin credentials to get a token\n3. Set the {{token}} variable in the collection or environment\n4. All other requests use Bearer {{token}}",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000/api" },
+    { "key": "token",    "value": "PASTE_TOKEN_HERE_AFTER_LOGIN" }
+  ],
+  "item": [
+
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@pharmacy.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/user"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/logout"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Medicines",
+      "item": [
+        {
+          "name": "List Medicines (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{base_url}}/medicines?per_page=5&search=",
+              "query": [
+                { "key": "per_page", "value": "5",  "description": "Results per page (max 100)" },
+                { "key": "search",   "value": "",    "description": "Filter by medicine name" },
+                { "key": "category_id", "value": "", "description": "Filter by category ID" },
+                { "key": "rx",       "value": "",    "description": "YES or NO" },
+                { "key": "low_stock","value": "",    "description": "1 to show only stock < 10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Single Medicine",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/medicines/1"
+          }
+        },
+        {
+          "name": "Create Medicine (with suppliers)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/medicines",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicine_name\": \"Omeprazole 40mg\",\n  \"category_id\": 1,\n  \"price\": 18.50,\n  \"stock\": 80,\n  \"prescription_required\": \"YES\",\n  \"suppliers\": [\n    {\n      \"id\": 1,\n      \"unit_cost\": 8.00,\n      \"quantity\": 100,\n      \"last_supplied_at\": \"2024-11-01\"\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Medicine (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/medicines/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicine_name\": \"Paracetamol 500mg\",\n  \"price\": 3.99,\n  \"stock\": 250,\n  \"prescription_required\": \"NO\",\n  \"suppliers\": [\n    {\n      \"id\": 1,\n      \"unit_cost\": 1.25,\n      \"quantity\": 500,\n      \"last_supplied_at\": \"2024-11-15\"\n    },\n    {\n      \"id\": 2,\n      \"unit_cost\": 1.40,\n      \"quantity\": 300,\n      \"last_supplied_at\": \"2024-11-10\"\n    }\n  ]\n}"
+            }
+          }
+        },
+        {
+          "name": "Partial Update Medicine (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/medicines/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stock\": 999\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Medicine",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/medicines/99"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/categories"
+          }
+        },
+        {
+          "name": "Get Category (with medicines)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/categories/1"
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/categories",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_name\": \"Dermatology\",\n  \"description\": \"Skin treatment medications\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/categories/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"category_name\": \"Analgesics\",\n  \"description\": \"Pain relief and fever reducers\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/categories/99"
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Suppliers",
+      "item": [
+        {
+          "name": "List Suppliers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/suppliers"
+          }
+        },
+        {
+          "name": "Get Supplier (with medicines + pivot)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/suppliers/1"
+          }
+        },
+        {
+          "name": "Create Supplier",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/suppliers",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"supplier_name\": \"BioMed Distributors\",\n  \"contact_person\": \"James Osei\",\n  \"email\": \"james@biomed.com\",\n  \"phone\": \"+1-555-0505\",\n  \"address\": \"99 Bio Park, Chicago\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Supplier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type",  "value": "application/json" }
+            ],
+            "url": "{{base_url}}/suppliers/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"supplier_name\": \"MedSource Ltd\",\n  \"phone\": \"+1-555-9999\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Supplier",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": "{{base_url}}/suppliers/99"
+          }
+        }
+      ]
+    }
+
+  ]
+}
